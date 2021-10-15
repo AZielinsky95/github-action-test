@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Test
+name: Update Coda Changelog
 
 # Controls when the workflow will run
 on: [push]
@@ -9,19 +9,13 @@ on: [push]
 jobs:
   # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-       - name: test
-         id: test
+       - name: Update Changelog
+         id: Update Changelog
          uses: steamclock/coda-changelog@v2.0
          with:
            commits: ${{ toJSON(github.event.commits) }}
            coda-token: ${{ secrets.CODA_TOKEN }}
            doc-id: 'p-_LNphf30'
-     
-       - name: token test
-         env: 
-          CODA_TOKEN: ${{ secrets.CODA_TOKEN }}
-         run: echo $CODA_TOKEN
