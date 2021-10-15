@@ -24,7 +24,7 @@ jobs:
     steps:
        - name: test
          id: test
-         uses: steamclock/coda-changelog@c40351be691b6ea90d0a114635880f84e6ce81d5
+         uses: steamclock/coda-changelog@test
          with:
            commits: github.event.commits
            milliseconds: 1000
