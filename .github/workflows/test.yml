@@ -17,6 +17,8 @@ jobs:
        - name: test
          id: test
          uses: steamclock/coda-changelog@v2.0
+         env:
+          coda-token: ${{ secrets.CODA_TOKEN }}
          with:
-           commits: ${{toJSON(github.event)}}
-           milliseconds: 1000
+           commits: ${{github.event.commits}} #${{toJSON(github.event)}}
+           doc-id: 'p-_LNphf30'
