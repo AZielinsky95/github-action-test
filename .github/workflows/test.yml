@@ -26,5 +26,5 @@ jobs:
          id: test
          uses: steamclock/coda-changelog@76be0dacb05c5d7523138c154736739ccc5e532d
          with:
-           commits: github.event.commits
+           commits: ${{ github.event.commits }}
            milliseconds: 1000
