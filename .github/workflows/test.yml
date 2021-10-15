@@ -24,7 +24,7 @@ jobs:
     steps:
        - name: test
          id: test
-         uses: steamclock/coda-changelog/tree/releases/test@v1
+         uses: steamclock/coda-changelog@v1.2
          with:
            commits: github.event.commits
            milliseconds: 1000
