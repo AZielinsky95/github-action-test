@@ -37,7 +37,7 @@ jobs:
       - name: Extract commits since last tag
         id: extract_commits
         run: |
-          echo "::set-output name=commits::$(echo $(git log v1.1.. \
+          echo "::set-output name=commits::$(echo $(git log v2.0.. \
               --pretty=format:'{%n  "commit": "%H",%n "body": "%b",%n  "message": "%s",%n    "timestamp": "%aD"%n,%n  "author": {%n    "name": "%aN",%n    "email": "%aE" } %n},' \
               $@  | awk 'BEGIN { print("[") } { print($0) } END { print("]") }' | python -u -c \
               'import ast,json,sys; print(json.dumps(ast.literal_eval(sys.stdin.read())))'))"
