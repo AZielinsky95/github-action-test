@@ -32,7 +32,9 @@ jobs:
       - name: Extract commits since last tag
         id: extract_commits
         run: |
-          echo "::set-output name=commits::$(echo $(git log -n 10 \ --pretty=format:'{"commit": "%H", "author": "%aN <%aE>", "date": "%ai", "message": """%B""", "notes": """%N""" },' \ $@  | awk 'BEGIN { print("[") } { print($0) } END { print("]") }' | python -u -c \'import ast,json,sys; print(json.dumps(ast.literal_eval(sys.stdin.read())))'))"
-
+          echo "::set-output name=test::$(echo $(git log -n 10 \
+              --pretty=format:'{"commit": "%H", "author": "%aN <%aE>", "date": "%ai", "message": """%B""", "notes": """%N""" },' \
+              $@  | awk 'BEGIN { print("[") } { print($0) } END { print("]") }' | python -u -c \
+              'import ast,json,sys; print(json.dumps(ast.literal_eval(sys.stdin.read())))'))"
       - name: Run a one-line script
         run: echo ${{ steps.extract_commits.outputs.commits }}
