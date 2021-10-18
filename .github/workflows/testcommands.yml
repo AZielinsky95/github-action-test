@@ -24,10 +24,19 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJSON(job) }}
+        run: echo "$JOB_CONTEXT"
 
       # Runs a single command using the runners shell
       - name: Extract commits since last tag
-        run: echo "::set-output name=commits::$(echo ${git log v1.1...main})"
+        run: echo "::set-output name=commits::${git log v1.1..})"
         shell: bash
         id: extract_commits
         
