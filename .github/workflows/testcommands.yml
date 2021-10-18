@@ -28,18 +28,13 @@ jobs:
       - name: Get latest tag
         id: latest_tag
         run: echo "::set-output name=name::$(git tag --sort=-creatordate | head -1)"
-        
-      - name: Print Tag
-        run: echo ${{ steps.latest_tag.outputs.name }}
-     # - name: "Get second latest tag"
-     #   id: second_latest_tag
-     #   run: echo "::set-output name=name::$(git tag --sort=-creatordate | head -2 | tail -1)"
+
       - name: Extract commits since last tag
         id: extract_commits
-        run: echo "::set-output name=commits::$(echo $(git log ${{ steps.latest_tag.outputs.name }}.. --pretty=format:'- %s\n'))"
-        
-     # - name: Dump GitHub commits since last tag
-     #   run: echo $(git log v1.. --pretty=format:'{"commit": "%H", "author": "%aN <%aE>", "date": "%ai", "message": """%B""", "notes": """%N""" },' $@  | awk 'BEGIN { print("[") } { print($0) } END { print("]") }' 'import ast,json,sys; print(json.dumps(ast.literal_eval(sys.stdin.read())))')
-        
+        run: |
+          echo ::set-output name=commits::$(echo $(git log v1.1.. \ --pretty=format:'{"commit": "%H", "author": "%aN <%aE>", "date": "%ai", "message": """%B""", "notes": """%N""" },' \
+          $@  | awk 'BEGIN { print("[") } { print($0) } END { print("]") }' \
+          'import ast,json,sys; print(json.dumps(ast.literal_eval(sys.stdin.read())))')
+
       - name: Run a one-line script
         run: echo ${{ steps.extract_commits.outputs.commits }}
