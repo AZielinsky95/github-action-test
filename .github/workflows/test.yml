@@ -12,10 +12,18 @@ jobs:
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-       - name: Update Changelog
-         id: update-changelog
-         uses: steamclock/coda-changelog@v1
-         with:
-           commits: ${{ toJSON(github.event.commits) }}
-           coda-token: ${{ secrets.CODA_TOKEN }}
-           doc-id: 'p-_LNphf30'
+      - name: Output the current branch name
+        run: echo running on branch ${GITHUB_REF##*/}
+          
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+        
+      - name: Update Changelog
+        id: update-changelog
+        uses: steamclock/coda-changelog@v1
+        with:
+          commits: ${{ toJSON(github.event.commits) }}
+          coda-token: ${{ secrets.CODA_TOKEN }}
+          doc-id: 'p-_LNphf30'
