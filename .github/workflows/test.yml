@@ -3,7 +3,11 @@
 name: Update Coda Changelog
 
 # Controls when the workflow will run
-on: [push]
+on: 
+  push:
+    branches:
+      - main
+      - 'release/*'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -16,7 +20,6 @@ jobs:
         run: echo running on branch ${GITHUB_REF##*/}
           
       - name: Extract branch name
-        shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
         
