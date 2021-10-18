@@ -26,5 +26,10 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
+      - name: Extract commits since last tag
+        run: echo "::set-output name=commits::$(echo ${git log v1.1...main})"
+        shell: bash
+        id: extract_commits
+        
       - name: Run a one-line script
-        run: echo git log v1.1...main
+        run: echo ${{ steps.extract_commits.outputs.commits }}
