@@ -3,11 +3,7 @@
 name: Update Coda Changelog
 
 # Controls when the workflow will run
-on: 
-  push:
-    branches:
-      - main
-      - 'release/*'
+on: [push]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -17,11 +13,16 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Output the current branch name
-        run: echo running on branch ${GITHUB_REF##*/}
+        run: echo running on branch ${GITHUB_REF#refs/heads/}
           
       - name: Extract branch name
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
+        shell: bash
         id: extract_branch
+        
+      - name: Echo Branch output
+        run: echo ${{ steps.extract_branch.outputs.branch }}
+        shell: bash
         
       - name: Update Changelog
         id: update-changelog
@@ -30,3 +31,4 @@ jobs:
           commits: ${{ toJSON(github.event.commits) }}
           coda-token: ${{ secrets.CODA_TOKEN }}
           doc-id: 'p-_LNphf30'
+          branch: eng:${{ steps.extract_branch.outputs.branch }}
