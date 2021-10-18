@@ -26,13 +26,13 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Dump GitHub commits since last tag
-        run: echo $(git log v1.1.. )
+        run: echo $(git log -n 10 )
         #\ --pretty=format:'{"commit": "%H", "author": "%aN <%aE>", "date": "%ai", "message": """%B""", "notes": """%N""" },' \ $@ | awk 'BEGIN { print("[") } { print($0) } END { print("]") }' | python -u -c \
    # 'import ast,json,sys; print(json.dumps(ast.literal_eval(sys.stdin.read())))')
 
 
       - name: Extract commits since last tag
-        run: echo "::set-output name=commits::$(echo $(git log v1.1..))"
+        run: echo "::set-output name=commits::$(echo $(git log -n 10))"
         shell: bash
         id: extract_commits
         
