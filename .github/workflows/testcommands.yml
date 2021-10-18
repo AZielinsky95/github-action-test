@@ -28,7 +28,7 @@ jobs:
       - name: Get latest tag
         id: latest_tag
         run: |
-          echo "::set-output name=name::${GITHUB_REF##*/}"
+          echo "::set-output name=name::${GITHUB_REF}"
           git tag --list
         
       - name: Print latest tag
