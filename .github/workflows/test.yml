@@ -13,14 +13,23 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Output the current branch name
-        run: echo running on branch ${GITHUB_REF}
+        run: echo running on branch ${GITHUB_WORKSPACE}
         
       - uses: actions/checkout@v1
       
+      - name: Get latest tag
+        id: latest_tag
+        run: |
+          echo "::set-output name=name::$(git tag --sort=-creatordate | head -1)"
+          git tag --list
+        
+      - name: Print latest tag
+        run: echo ${{ steps.latest_tag.outputs.name }}
+
       - name: Extract commits since last tag
         id: extract_commits
         run: |
-          echo "::set-output name=commits::$(echo $(git log v2.0.. \
+          echo "::set-output name=commits::$(echo $(git log ${{ steps.latest_tag.outputs.name }}.. \
               --pretty=format:'{%n  "commit": "%H",%n "body": "%b",%n  "message": "%s",%n    "timestamp": "%aD"%n,%n  "author": {%n    "name": "%aN",%n    "email": "%aE" } %n},' \
               $@  | awk 'BEGIN { print("[") } { print($0) } END { print("]") }' | python -u -c \
               'import ast,json,sys; print(json.dumps(ast.literal_eval(sys.stdin.read())))'))"
