@@ -28,8 +28,13 @@ jobs:
         shell: bash
         id: extract_branch
         
-      - name: Echo Branch output
-        run: echo eng:${{ steps.extract_branch.outputs.branch }}
+      - name: Extract latest commit hash
+        run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
+        shell: bash
+        id: latest_hash
+        
+      - name: Echo latest hash output
+        run: echo eng:${{ steps.latest_hash.outputs.sha }}
         shell: bash
       
       - name: Update Changelog  
@@ -40,7 +45,7 @@ jobs:
           token: ${{ secrets.PAT }}
           coda-token: ${{ secrets.CODA_TOKEN }}
           doc-id: 'p-_LNphf30'
-          branch: eng:${{ steps.extract_branch.outputs.branch }}
+          branch: ${{ steps.extract_branch.outputs.branch }}
         env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
