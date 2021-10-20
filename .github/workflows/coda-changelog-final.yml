@@ -42,6 +42,7 @@ jobs:
         uses: steamclock/coda-changelog@v1
         with:
           fromTag: 'v3.0'
+          commits: ${{ toJSON(github.event.commits) }}
           token: ${{ secrets.PAT }}
           coda-token: ${{ secrets.CODA_TOKEN }}
           doc-id: 'p-_LNphf30'
