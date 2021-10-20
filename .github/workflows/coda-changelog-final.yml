@@ -28,15 +28,6 @@ jobs:
         shell: bash
         id: extract_branch
         
-      - name: Extract latest commit hash
-        run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
-        shell: bash
-        id: latest_hash
-        
-      - name: Echo latest hash output
-        run: echo eng:${{ steps.latest_hash.outputs.sha }}
-        shell: bash
-      
       - name: Update Changelog  
         id: update-changelog
         uses: steamclock/coda-changelog@v1
