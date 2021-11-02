@@ -1,6 +1,5 @@
 name: coda-changelog-final
 
-
 on:
   push:
     branches: [ main ]
