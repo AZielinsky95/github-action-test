@@ -16,7 +16,7 @@ jobs:
       - name: Output the current branch name
         run: echo running on branch ${GITHUB_WORKSPACE}
         
-      #- uses: actions/checkout@v1
+      - uses: actions/checkout@v1
       
       - name: Get latest tag
         id: latest_tag
