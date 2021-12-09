@@ -18,7 +18,7 @@ jobs:
         
       - name: Update Changelog  
         id: update-changelog
-        uses: steamclock/coda-changelog@az/fix-squashed-commits
+        uses: steamclock/coda-changelog@40d1c06931371ba2e5034d2a5c11e528f6cc7bcb
         with:
           fromTag: 'v3.0'
           commits: ${{ toJSON(github.event.commits) }}
