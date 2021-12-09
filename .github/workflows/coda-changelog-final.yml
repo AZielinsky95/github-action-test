@@ -19,7 +19,7 @@ jobs:
         
       - name: Update Changelog  
         id: update-changelog
-        uses: steamclock/coda-changelog@main
+        uses: steamclock/coda-changelog@v1
         with:
           fromTag: 'v3.0'
           commits: ${{ toJSON(github.event.commits) }}
