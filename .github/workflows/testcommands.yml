@@ -1,21 +1,28 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Update Coda Changelog
+name: CI
 
 # Controls when the workflow will run
-on: [push]
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
- 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Output the current branch name
-        run: echo running on branch ${GITHUB_WORKSPACE}
-        
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v1
       
       - name: Get latest tag
@@ -30,30 +37,9 @@ jobs:
       - name: Extract commits since last tag
         id: extract_commits
         run: |
-          echo "::set-output name=commits::$(echo $(git log ${{ steps.latest_tag.outputs.name }}.. \
+          echo "::set-output name=commits::$(echo $(git log v2.0.. \
               --pretty=format:'{%n  "commit": "%H",%n "body": "%b",%n  "message": "%s",%n    "timestamp": "%aD"%n,%n  "author": {%n    "name": "%aN",%n    "email": "%aE" } %n},' \
               $@  | awk 'BEGIN { print("[") } { print($0) } END { print("]") }' | python -u -c \
               'import ast,json,sys; print(json.dumps(ast.literal_eval(sys.stdin.read())))'))"
-              
       - name: Run a one-line script
         run: echo ${{ steps.extract_commits.outputs.commits }}
-
-          
-      - name: Extract branch name
-        run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
-        shell: bash
-        id: extract_branch
-        
-      - name: Echo Branch output
-        run: echo eng:${{ steps.extract_branch.outputs.branch }}
-        shell: bash
-        
-      - name: Update Changelog
-        id: update-changelog
-        uses: steamclock/coda-changelog@v1
-        with:
-          all-commits: ${{ steps.extract_commits.outputs.commits }}
-          commits: ${{ toJSON(github.event.commits) }}
-          coda-token: ${{ secrets.CODA_TOKEN }}
-          doc-id: 'p-_LNphf30'
-          branch: eng:${{ steps.extract_branch.outputs.branch }}

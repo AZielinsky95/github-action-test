@@ -1,0 +1,31 @@
+name: coda-changelog-final
+
+on:
+  push:
+    branches: [ release/* ]
+
+  workflow_dispatch:
+
+jobs:
+  upload-to-coda:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Extract branch name
+        run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
+        shell: bash
+        id: extract_branch
+        
+      - name: Update Changelog  
+        id: update-changelog
+        uses: steamclock/coda-changelog@v1
+        with:
+          fromTag: 'v3.0'
+          commits: ${{ toJSON(github.event.commits) }}
+          token: ${{ secrets.PAT }}
+          coda-token: ${{ secrets.CODA_TOKEN }}
+          doc-id: 'p-_LNphf30'
+          branch: ${{ steps.extract_branch.outputs.branch }}
+        env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         
