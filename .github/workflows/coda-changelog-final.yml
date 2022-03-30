@@ -2,7 +2,7 @@ name: coda-changelog-final
 
 on:
   push:
-    branches: [ release/* ]
+    branches: [ main ]
 
   workflow_dispatch:
 
@@ -18,7 +18,7 @@ jobs:
         
       - name: Update Changelog  
         id: update-changelog
-        uses: steamclock/coda-changelog@az/99-show-issue-title
+        uses: steamclock/coda-changelog@v1
         with:
           fromTag: 'v3.0'
           commits: ${{ toJSON(github.event.commits) }}
